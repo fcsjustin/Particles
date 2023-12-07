@@ -77,4 +77,4 @@ namespace Matrices
     };
 }
 
-#endif // MATRIX_H_INCLUDED
+#endif

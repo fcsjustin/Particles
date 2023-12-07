@@ -1,7 +1,5 @@
 #include "Matrices.h"
-
 using namespace std;
-//Most of this is pulled from M04 Assignment (Matrices)
 namespace Matrices {
 
     Matrix::Matrix(int _rows, int _cols)
@@ -65,7 +63,6 @@ namespace Matrices {
 	   return c;
     }
 
-    // Equivalency: Returns a bool if both matrices are close enough to equal (Absolute value of difference of Doubles)
     bool operator==(const Matrix& a, const Matrix& b)
     {
 	   if (a.getRows() != b.getRows() || a.getCols() != b.getCols())
@@ -87,7 +84,6 @@ namespace Matrices {
 	   return true;
     }
 
-    // Opposite of Equivalency, returns the negated equivalency test
     bool operator!=(const Matrix& a, const Matrix& b)
     {
 	   return !(a == b);
@@ -111,7 +107,6 @@ namespace Matrices {
     }
 }
 
-
 Matrices::RotationMatrix::RotationMatrix(double theta) : Matrix(2, 2) {
     
 
@@ -121,7 +116,6 @@ Matrices::RotationMatrix::RotationMatrix(double theta) : Matrix(2, 2) {
     a[1][1] = cos(theta);
 }
 
-// 2D Scaling matrix
 Matrices::ScalingMatrix::ScalingMatrix(double scale) : Matrix(2, 2) {
     
 
@@ -131,7 +125,6 @@ Matrices::ScalingMatrix::ScalingMatrix(double scale) : Matrix(2, 2) {
     a[1][1] = scale;
 }
 
-// 2D Translation matrix
 Matrices::TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols) : Matrix(2, nCols) {
     
 
