@@ -6,7 +6,7 @@
 
 Engine::Engine() 
 {
-    m_Window.create(sf::VideoMode::getDesktopMode(), "Your Game Title");
+    m_Window.create(sf::VideoMode::getDesktopMode(), "Particles");
 }
 
 void Engine::run() {
