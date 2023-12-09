@@ -145,7 +145,7 @@ void Particle::unitTests()
     cout << "Score: " << score << " / 7" << endl;
 }
 
-Particle::Particle(sf::RenderTarget& target, int numPoints, sf::Vector2i mouseClickPosition)
+Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition)
     : m_A(2, numPoints)
 {
     m_ttl = TTL;
@@ -155,6 +155,8 @@ Particle::Particle(sf::RenderTarget& target, int numPoints, sf::Vector2i mouseCl
     m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
 
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+
+    m_pastPositions.push_back(m_centerCoordinate);
 
     m_vx = (rand() % 400) + 250;
     m_vy = (rand() & 400) + 250;
@@ -180,8 +182,30 @@ Particle::Particle(sf::RenderTarget& target, int numPoints, sf::Vector2i mouseCl
     }
 }
 
-void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Particle::draw(RenderTarget& target, RenderStates states) const
 {
+    for (size_t i = 1; i < m_pastPositions.size(); ++i) 
+    {
+    float alpha = static_cast<float>(i) / m_pastPositions.size(); 
+
+    Color newColor = Color(
+        static_cast<Uint8>(m_color1.r * (1.0 - alpha) + m_color2.r * alpha),
+        static_cast<Uint8>(m_color1.g * (1.0 - alpha) + m_color2.g * alpha),
+        static_cast<Uint8>(m_color1.b * (1.0 - alpha) + m_color2.b * alpha),
+        static_cast<Uint8>(alpha * 255)
+    );
+
+    VertexArray lines(LineStrip, 2);
+    lines[0].position = static_cast<Vector2f>(target.mapCoordsToPixel(m_pastPositions[i - 1], m_cartesianPlane));
+
+    lines[0].color = newColor;
+    lines[1].position = static_cast<Vector2f>(target.mapCoordsToPixel(m_pastPositions[i], m_cartesianPlane));
+
+    lines[1].color = newColor;
+
+    target.draw(lines, states);
+}
+    
     VertexArray lines(TriangleFan, m_numPoints + 1);
     Vector2f center = (Vector2f)(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane));
 
@@ -209,6 +233,13 @@ void Particle::update(float dt)
     float dy = m_vy * dt;
     translate(dx, dy);
     transitionAlpha(dt);
+
+    m_pastPositions.push_back(m_centerCoordinate);
+
+    while (m_pastPositions.size() > 70) 
+    {
+        m_pastPositions.erase(m_pastPositions.begin());
+    }
 }
 
 void Particle::transitionAlpha(float dt)

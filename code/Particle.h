@@ -36,4 +36,5 @@ private:
     void rotate(double theta);
     void scale(double c);
     void translate(double xShift, double yShift);
+    vector<Vector2f> m_pastPositions;
 };
