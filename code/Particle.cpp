@@ -162,6 +162,8 @@ Particle::Particle(sf::RenderTarget& target, int numPoints, sf::Vector2i mouseCl
     m_color1 = Color::White;
     m_color2 = Color(rand() % 256, rand() % 256, rand() % 256);
 
+    m_pulsatingAlpha = 240.0;
+
     float theta = ((float)rand() / RAND_MAX) * MPI / 2.0;
     float dTheta = ((2 * MPI) / (numPoints - 1));
 
@@ -190,6 +192,7 @@ void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         lines[j].position = (Vector2f)(target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane));
         lines[j].color = m_color2;  
+        lines[j].color.a = m_color2.a;
     }
     
     target.draw(lines, states);
@@ -205,6 +208,14 @@ void Particle::update(float dt)
     m_vy -= G * dt;
     float dy = m_vy * dt;
     translate(dx, dy);
+    transitionAlpha(dt);
+}
+
+void Particle::transitionAlpha(float dt)
+{
+    const float PULSATING_ALPHA_TRANSITION_SPEED = 110.0;
+    m_pulsatingAlpha += PULSATING_ALPHA_TRANSITION_SPEED * dt;
+    m_color2.a = static_cast<Uint8>(std::sin(m_pulsatingAlpha * 0.01) * 240.0);
 }
 
 void Particle::translate(double xShift, double yShift)
