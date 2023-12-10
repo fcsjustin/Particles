@@ -156,6 +156,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
 
+    // for trail code
     m_pastPositions.push_back(m_centerCoordinate);
 
     m_vx = (rand() % 400) + 250;
@@ -187,6 +188,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 
 void Particle::draw(RenderTarget& target, RenderStates states) const
 {
+    // trail code part (justins part)
     for (size_t i = 1; i < m_pastPositions.size(); ++i) 
     {
     float alpha = static_cast<float>(i) / m_pastPositions.size(); 
@@ -208,7 +210,9 @@ void Particle::draw(RenderTarget& target, RenderStates states) const
 
     target.draw(lines, states);
 }
+    // trail code part (justins part)
     
+    //start from here
     VertexArray lines(TriangleFan, m_numPoints + 1);
     Vector2f center = (Vector2f)(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane));
 
@@ -237,12 +241,14 @@ void Particle::update(float dt)
     translate(dx, dy);
     transitionAlpha(dt);
 
+    // this is for trail code (justins part)
     m_pastPositions.push_back(m_centerCoordinate);
 
     while (m_pastPositions.size() > 30) 
     {
         m_pastPositions.erase(m_pastPositions.begin());
     }
+    // trail code
 }
 
 void Particle::transitionAlpha(float dt)
