@@ -239,7 +239,7 @@ void Particle::update(float dt)
 
     m_pastPositions.push_back(m_centerCoordinate);
 
-    while (m_pastPositions.size() > 70) 
+    while (m_pastPositions.size() > 30) 
     {
         m_pastPositions.erase(m_pastPositions.begin());
     }
