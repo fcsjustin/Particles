@@ -160,6 +160,9 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 
     m_vx = (rand() % 400) + 250;
     m_vy = (rand() & 400) + 250;
+    
+    // added to randomize direction (shoots either left or right)
+    m_vx *= (rand() % 2 != 0) ? 1 : -1;
 
     m_color1 = Color::White;
     m_color2 = Color(rand() % 256, rand() % 256, rand() % 256);
